@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+<meta charset="UTF-8">
+<title>F5M Panel Login</title>
+<style>
+body{background:#111;color:#fff;font-family:Arial;text-align:center;margin-top:100px}
+input,button{padding:10px;font-size:18px}
+</style>
+</head>
+<body>
+
+<h1>🔐 دخول بانل F5M</h1>
+<input id="code" placeholder="أدخل الكود">
+<br><br>
+<button onclick="login()">دخول</button>
+
+<script>
+async function login(){
+  const code=document.getElementById("code").value.trim();
+  const res=await fetch("codes.json");
+  const data=await res.json();
+
+  if(code===data.owner.code){
+    localStorage.setItem("user","OWNER");
+    localStorage.setItem("maxBots",data.owner.maxBots);
+    location.href="panel.html";
+    return;
+  }
+
+  const found=data.codes.find(c=>c.code===code);
+  if(found){
+    localStorage.setItem("user",code);
+    localStorage.setItem("maxBots",found.maxBots);
+    location.href="panel.html";
+  }else{
+    alert("❌ كود غير صالح");
+  }
+}
+</script>
+
+</body>
+</html>
